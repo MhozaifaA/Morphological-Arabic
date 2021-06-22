@@ -26,6 +26,11 @@ Dictionary<Templates, string[]> TemplateSteps = new() {
     [Templates.Nominative] = new string[] {"مبتدأ" ,"خبر" , "صفة" , "حرف عطف" ,"اسم عطف"} ,
     [Templates.Verb] = new string[] {"فعل" ,"فاعل" , "مفعول به","مضاف","حرف جر","اسم مجرور"} ,
 };
+Collection<(string Conscience, string AdditionPresent , string AdditionPast)> Consciences = new() {
+    ("أنا", "أ_","_تو"), ("نحن", "ن_","_نا"),
+    ("أنتَ", "ت_","_ا"), ("أنتِ", "ت_ين", "_تي"), ("أنتما", "ت_ن","_تما"), ("أنتم", "ت_ون","_تم"), ("أنتن", "ت_ن","_تنا"),
+    ("هو", "ي_","_"), ("هي", "ت_","_تْ"), ("هما", "_ا","_ا"), ("هنْ", "ي_ن","_نا"), ("هم", "ي_ون","_وا"),
+};
 
 
 //verbs
@@ -57,7 +62,7 @@ GrammarTemplate("أكل حذيفة التفاحة في كلية وحيدا");
 GrammarTemplate("حذيفة طالب مجد جدا و شطور كتير");
 
 //#3
-
+MergeConscience("ضرب");
 
 
 
@@ -305,6 +310,39 @@ void FormationVerb(string[] words)
 
 #endregion
 
+
+#region -   #3   -
+
+void MergeConscience(string word)
+{
+    SpacePrinter(3);
+    // var xci = new Regex(tox, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    word = word.IgnoreDiacritics();
+
+    if (word.Length > 2 && word[0].Equals('ا') && word[1].Equals('ل'))
+    {
+        word = word.Substring(2);
+    }
+
+    if (word.Length < 3)
+    {
+        Console.WriteLine("{الخوارزمية لاتعمل على مشتقات دون الفعل الثلاثي {فعل");
+        return;
+    }
+
+    word = ExtractRoot(word);
+
+    Collection<(string Key , string Value)> chain = new();
+    for (int i = 0; i < Consciences.Count; i++)
+    {
+        chain.Add(( Consciences[i].Conscience , Consciences[i].AdditionPresent.Replace("_", word) +","+ Consciences[i].AdditionPast.Replace("_", word)));
+    }
+
+    Console.WriteLine(chain.Select(root => root.Key + ":" + root.Value).StringJoin());
+}
+
+#endregion
 
 void SpacePrinter(int num)
   =>  Console.WriteLine($"\n\n> #{num} \n\n");
