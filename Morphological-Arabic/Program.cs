@@ -65,7 +65,16 @@ GrammarTemplate("حذيفة طالب مجد جدا و شطور كتير");
 MergeConscience("ضرب");
 
 //#4
-ElicitFromTopic(" درس الدارس في المدرسة،  قام الطلاب بدراسة الدرس حيث أدرس شخص بينهم  تفوق","درس");
+ElicitFromTopic(" درس الدارس في المدرسة،  قام الطلاب بدراسة الدرس حيث يدرس شخص بينهم  تفوق","درس");
+
+//#5
+Summarization("الدراسة و الطلب عليها , " +
+    "الدراسة هيه مفهوم الحياة ," +
+    "لايكن ان نميز بين درس و الطالب ," +
+    "يعد العيش ضمن الحياة امر صعب الدراسة ," +
+    "درس لإبعد الحلول ," +
+    "مطلوب ذلك كثيرا له ," 
+    ,0.1f);
 
 
 
@@ -379,6 +388,55 @@ void ElicitFromTopic(string topic , string root)
 #endregion
 
 
+#region -   #5   -
+
+void Summarization(string topic ,float percent)
+{
+    SpacePrinter(5);
+
+    var phrases = topic.TopicSpliter();
+    var title = phrases[0];
+
+    var ableroots = title.WordSpliter().Select(w=> ExtractRoot(w.UnThe())).Where(w=>w.Length>2 &&
+    Roots.Any(r => r.Key.IgnoreDiacritics().Equals(w, StringComparison.InvariantCulture)) );
+
+    string[] chain = new string[phrases.Length]; //max
+    chain[0] = ableroots.StringJoin()+ "\n\n";
+
+    //Derivatives
+    //Prepositions
+    //conjunctions
+
+    var allinone = Consciences.Select(x=>x.Conscience).Concat(Derivatives.Concat(Prepositions.Concat(conjunctions)));
+
+    for (int i = 1; i < phrases.Length; i++)
+   
+    {
+        int fq = 0;
+        var _words = phrases[i].WordSpliter();
+
+        var interstCount = _words.Count(w=> (w.Length>2 ||  !(w.Length<=4 && allinone.Any(a=>w.StartsWith(a))) ) );
+
+        foreach (var word in _words.Select(w=>w.IgnoreDiacritics()))
+        {
+            if (ableroots.Any(root=> ExtractRoot(word.UnThe()).Equals(root,StringComparison.InvariantCulture) ))
+            {
+                fq++;
+            }
+        }
+
+        if ((fq/(float)_words.Length) >= percent)
+        {
+            chain[i] = phrases[i]+"\n";
+        }
+    }
+
+    Console.WriteLine(chain.ToJoin());
+}
+
+#endregion
+
+
 void SpacePrinter(int num)
   =>  Console.WriteLine($"\n\n> #{num} \n\n");
 
@@ -408,5 +466,12 @@ public static class Extensions
 
     public static string[] WordSpliter(this string value)
      => value.Trim().Split(" ").Select(x=>x.Trim()).Where(x=> x != "" && x.Trim() != "" && x != " " && x.Trim() != " ").ToArray();
+
+    public static string[]TopicSpliter(this string value)
+    => value.Trim().Split(",").Select(x => x.Trim()).Where(x => x != "" && x.Trim() != "" && x != " " && x.Trim() != " ").ToArray();
+
+
+    public static string UnThe(this string word)
+      => (word.Length > 2 && word[0].Equals('ا') && word[1].Equals('ل'))? word.Substring(2):word;
 
 }
