@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 Console.WriteLine("Hello World!");
 
@@ -55,17 +54,17 @@ HashSet<string> cNouns = new() {
 
 
 //#1
-ElicitDerivatives("ضرب");
+ElicitDerivatives("مَكْتُوب");
 
 //#2
-GrammarTemplate("أكل حذيفة التفاحة في كلية وحيدا");
-GrammarTemplate("حذيفة طالب مجد جدا و شطور كتير");
+GrammarTemplate("أكل الطالب التفاحة الحمراء في باحة المدرسة");
+GrammarTemplate("السماء مشرقة جميلة و العصافير تزقزق");
 
 //#3
-MergeConscience("ضرب");
+MergeConscience("شارب");
 
 //#4
-ElicitFromTopic(" درس الدارس في المدرسة،  قام الطلاب بدراسة الدرس حيث يدرس شخص بينهم  تفوق","درس");
+ElicitFromTopic(" درس الدارس في المدرسة،  قام الطلاب بدراسة الدرس حيث أدرس شخص بينهم  تفوق","درس");
 
 //#5
 Summarization("الدراسة و الطلب عليها , " +
