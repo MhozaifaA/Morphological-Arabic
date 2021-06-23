@@ -64,6 +64,8 @@ GrammarTemplate("حذيفة طالب مجد جدا و شطور كتير");
 //#3
 MergeConscience("ضرب");
 
+//#4
+ElicitFromTopic(" درس الدارس في المدرسة،  قام الطلاب بدراسة الدرس حيث أدرس شخص بينهم  تفوق","درس");
 
 
 
@@ -343,6 +345,39 @@ void MergeConscience(string word)
 }
 
 #endregion
+
+
+#region -   #4   -
+
+void ElicitFromTopic(string topic , string root)
+{
+    SpacePrinter(4);
+
+    var words = topic.WordSpliter();
+    StringBuilder highlight = new StringBuilder();
+    foreach (var _word in words)
+    {
+
+        var word = _word.IgnoreDiacritics();
+
+        if (word.Length > 2 && word[0].Equals('ا') && word[1].Equals('ل'))
+        {
+            word = word.Substring(2);
+        }
+
+        if (ExtractRoot(word).Equals(root, StringComparison.InvariantCulture))
+        {
+            highlight.Append(word.ToPattern()+ " ");
+            continue;
+        }
+
+        highlight.Append(word + " ");
+    }
+    Console.WriteLine(highlight.ToString());
+}
+
+#endregion
+
 
 void SpacePrinter(int num)
   =>  Console.WriteLine($"\n\n> #{num} \n\n");
