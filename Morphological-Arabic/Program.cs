@@ -1,4 +1,8 @@
-﻿using System;
+﻿//ملاحظة:
+//تم ادخال امثلة معقدة قواعديا لبيان عمل الخوارزميات بشكل امثلي – بعض المدخالت قد تكون 
+//تحوي خطئ كتابي او قواعدي
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -26,7 +30,7 @@ Dictionary<Templates, string[]> TemplateSteps = new() {
     [Templates.Verb] = new string[] {"فعل" ,"فاعل" , "مفعول به","مضاف","حرف جر","اسم مجرور"} ,
 };
 Collection<(string Conscience, string AdditionPresent , string AdditionPast)> Consciences = new() {
-    ("أنا", "أ_","_تو"), ("نحن", "ن_","_نا"),
+    ("أنا", "أ_","_و"), ("نحن", "ن_","_نا"),
     ("أنتَ", "ت_","_ا"), ("أنتِ", "ت_ين", "_تي"), ("أنتما", "ت_ن","_تما"), ("أنتم", "ت_ون","_تم"), ("أنتن", "ت_ن","_تنا"),
     ("هو", "ي_","_"), ("هي", "ت_","_تْ"), ("هما", "_ا","_ا"), ("هنْ", "ي_ن","_نا"), ("هم", "ي_ون","_وا"),
 };
@@ -54,11 +58,13 @@ HashSet<string> cNouns = new() {
 
 
 //#1
-ElicitDerivatives("مَكْتُوب");
+ElicitDerivatives("ضارب");
 
 //#2
 GrammarTemplate("أكل الطالب التفاحة الحمراء في باحة المدرسة");
 GrammarTemplate("السماء مشرقة جميلة و العصافير تزقزق");
+GrammarTemplate("مشى علي في الجامعة الارض زفت");
+GrammarTemplate("السماء صافية و جميلة و زرقاء");
 
 //#3
 MergeConscience("شارب");
@@ -73,7 +79,7 @@ Summarization("الدراسة و الطلب عليها , " +
     "يعد العيش ضمن الحياة امر صعب الدراسة ," +
     "درس لإبعد الحلول ," +
     "مطلوب ذلك كثيرا له ," 
-    ,0.26f);
+    ,0.20f);
 
 
 
@@ -424,7 +430,7 @@ void Summarization(string topic ,float percent)
             }
         }
 
-        if ((fq/(float)_words.Length) >= percent)
+        if ((fq/(float)interstCount) >= percent)
         {
             chain[i] = phrases[i]+"\n";
         }
