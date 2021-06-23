@@ -55,7 +55,7 @@ HashSet<string> cNouns = new() {
 
 
 //#1
-ElicitDerivatives("كتب");
+ElicitDerivatives("ضرب");
 
 //#2
 GrammarTemplate("أكل حذيفة التفاحة في كلية وحيدا");
